@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+      integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <title th:text="#{ApplicantsList}">Ứng viên</title>
+  </head>
+  <body>
+    <header th:insert="template.html :: topmenu"></header>
+    <div class="container mt-3">
+      <h1 class="text-info" th:text="#{ApplicantsList}">Danh sách ứng viên</h1>
+      <table class="table table-bordered table-striped text-center mt-3">
+        <thead>
+          <tr class="bg-info">
+            <th scope="col">#</th>
+            <th scope="col" th:text="#{Jobs}">Công việc</th>
+            <th scope="col" th:text="#{Companies}">Nhà tuyển dụng</th>
+            <th scope="col" th:text="#{Name}">Tên ứng viên</th>
+            <th scope="col">Email</th>
+            <th scope="col" th:text="#{Phone}">Điện thoại</th>
+            <th scope="col" th:text="#{Skill}">Kỹ năng</th>
+            <th scope="col" th:text="#{Option}">Tùy chọn</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="applicant, iStat:${applicants}">
+            <td th:text="${iStat.index} +1"></td>
+            <td th:text="${jobRepository.getById(applicant.job_id).title}"></td>
+            <td th:text="${employerRepository.getEmployerById(jobRepository.getById(applicant.job_id).emp_id).name}">
+            </td>
+            <td th:text="${applicant.name}"></td>
+            <td th:text="${applicant.email}"></td>
+            <td th:text="${applicant.phone}"></td>
+            <td th:text="${applicant.skills}"></td>
+            <td>
+              <a
+                class="btn btn-outline-warning"
+                th:href="|update/${applicant.id}|"
+                method="PUT"
+              >
+                <i class="bi bi-pencil-square"></i>
+              </a>
+              <a 
+                class="btn btn-outline-primary"
+                th:href="|sendEmail/${applicant.id}|"
+                method="POST"
+              >
+                <i class="bi bi-envelope"></i>
+              </a>
+              <a
+                th:data-id="${applicant.id}"
+                th:data-name="${applicant.name}"
+                onclick="showConfirmModalDialog(this.getAttribute('data-id'), this.getAttribute('data-name'))"
+                class="btn btn-outline-danger"
+              >
+                <i class="bi bi-trash"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <script>
+        function showConfirmModalDialog(id, name) {
+          $("#applicantName").text(name);
+          $("#yesOption").attr("href", "/applicant/delete/" + id);
+          $("#confirmationId").modal("show");
+        }
+      </script>
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        id="confirmationId"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Xóa ứng viên</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Bạn có muốn xóa ứng viên "<span
+                class="text-danger"
+                id="applicantName"
+              ></span
+              >"?
+            </div>
+            <div class="modal-footer">
+              <a id="yesOption" class="btn btn-danger">Có</a>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Không
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>

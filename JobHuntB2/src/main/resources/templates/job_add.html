@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <title th:text="#{AddJobs}">Thêm việc làm</title>
+  </head>
+  <body>
+    <header th:insert="template.html :: topmenu"></header>
+    <div class="container border rounded col-4 mt-5 bg-light">
+      <h1 class="text-center text-info mt-3" th:text="#{AddJobs}">Thêm công việc</h1>
+      <form class="col-12" th:object="${addJob}" method="POST">
+        <div class="mb-3 mt-3">
+          <label for="title" class="ms-1 mb-2" th:text="#{NameCompany}"
+            >Công việc</label
+          >
+          <select class="form-select" th:field="*{emp_id}">
+            <option
+              th:each="employer : ${employers}"
+              th:value="${employer.id}"
+              th:text="${employer.name}"
+            ></option>
+          </select>
+        </div>
+
+        <div class="mb-3 mt-3">
+          <label for="title" class="ms-1 mb-2" th:text="#{Jobs}"
+            >Công việc</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="title"
+            th:field="*{title}"
+            placeholder="Enter Job"
+          />
+        </div>
+
+        <div class="form-group mb-3 mt-3">
+          <label for="content" class="ms-1" th:text="#{Description}"
+            >Content:</label
+          >
+          <textarea
+            class="form-control"
+            rows="3"
+            th:field="*{description}"
+            name="content"
+            placeholder="Enter Description"
+          ></textarea>
+        </div>
+
+        <div class="mb-3 mt-3">
+          <label for="description" class="form-label ms-1" th:text="#{Location}"
+            >Thanh pho</label
+          >
+          <select class="" th:field="*{city}">
+            <option
+              th:each="city : ${T(vn.techmaster.jobhunt.model.City).values()}"
+              th:value="${city}"
+              th:text="${city.label}"
+            ></option>
+          </select>
+        </div>
+
+        <div class="text-center">
+          <button
+            type="submit"
+            class="btn btn-success mb-3"
+            th:text="#{Success}"
+          >
+            Hoàn tất
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

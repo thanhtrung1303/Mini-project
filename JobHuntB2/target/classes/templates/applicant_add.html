@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <title th:text="#{AddApplicants}">Ứng tuyển</title>
+  </head>
+  <body>
+    <header th:insert="template.html :: topmenu"></header>
+    <div class="container border rounded col-4 mt-3 bg-light">
+      <h1 class="text-center text-info mt-3" th:text="#{AddApplicants}">
+        Thêm ứng viên
+      </h1>
+      <form th:object="${applicant}" method="POST">
+ 
+        <div class="mb-3" th:object="${job}">
+          <label class="form-label ms-1" for="job_id">Job</label>
+          <input
+            type="text"
+            class="form-control"
+            id="job_id"
+            th:value="${job.title}"
+            readonly
+          />
+        </div>
+
+        <div class="mb-3 mt-3">
+          <label class="form-label ms-1" th:text="#{Name}">Tên</label>
+          <input
+            type="text"
+            class="form-control"
+            th:field="*{name}"
+            placeholder="Enter name"
+          />
+        </div>
+        <div class="mb-3 mt-3">
+          <label class="form-label ms-1">Email</label>
+          <input
+            type="text"
+            class="form-control"
+            th:field="*{email}"
+            placeholder="Enter Email"
+          />
+        </div>
+        <div class="mb-3 mt-3">
+          <label class="form-label ms-1" th:text="#{Phone}">Phone</label>
+          <input
+            type="text"
+            class="form-control"
+            th:field="*{phone}"
+            placeholder="Enter Phone"
+          />
+        </div>
+        <div class="mb-3 mt-3">
+          <label class="form-check-label ms-2" for="skill" th:text="#{Skill}"
+            >Skill:</label
+          >
+          <span
+            class="mt-2"
+            th:each="skill : ${T(vn.techmaster.jobhunt.model.Skill).values()}"
+          >
+            <input
+              class="ms-3 form-check-input"
+              type="checkbox"
+              th:value="${skill}"
+              th:field="*{skills}"
+              th:text="${skill.label}"
+            />
+          </span>
+        </div>
+        <div class="text-center mt-3">
+          <button
+            type="submit"
+            class="btn btn-success mb-3"
+            th:text="#{Success}"
+          >
+            ứng tuyển
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
